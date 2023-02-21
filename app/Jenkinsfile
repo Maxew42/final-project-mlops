@@ -1,0 +1,76 @@
+#!/usr/bin/env groovy
+
+pipeline {
+
+    agent any
+    environment {
+        REPO = "Maxew42/final-project-mlop"
+    }
+    stages {
+        stage('creatingrelease') {
+            steps {
+        withCredentials([string(credentialsId: 'accessgithub', variable: 'TOKEN')]) {
+          sh '''#!/bin/bash
+            LAST_LOG=$(git log --format='%H' --max-count=1 origin/main)
+            echo "LAST_LOG:$LAST_LOG"
+            LAST_MERGE=$(git log --format='%H' --merges --max-count=1 origin/main)
+            echo "LAST_MERGE:$LAST_MERGE"
+            LAST_MSG=$(git log --format='%s' --max-count=1 origin/main)
+            echo "LAST_MSG:$LAST_MSG"
+            git checkout -b releaseBranch1
+            git push -u origin releaseBranch1
+            '''
+            }
+        }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                sh """
+                    cd app
+                    pip3 install flake8 pytest
+                    pip3 install -r requirements.txt
+                """
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                sh """
+                    python3 -m unittest
+                """
+                echo '$REPO'
+            }
+        }
+        stage('Build docker image') {
+            steps {
+                echo 'Building Dodcker'
+                
+                sh """
+                    docker build -t maxew42/app-fp:latest .
+                    docker ps
+                """
+                 withCredentials([string(credentialsId: 'accessdocker', variable: 'TOKEN')]) {
+                    sh """
+                        docker login -u maxew42 -p "$TOKEN"
+                        docker push maxew42/app-fp:latest
+                    """
+
+                 }
+
+            }
+        }
+                stage('Send to Main') {
+            steps {
+                echo 'Merging and pushing on main'
+                
+                sh """
+                    git checkout main
+                    git pull origin main
+                    git merge releaseBranch1
+                    git push -u origin main
+                    """
+                 }
+            }
+    }
+}
