@@ -7,9 +7,10 @@
         <title>What are you looking for ?</title>
     </head>
     <body>
-        {%for i in range(len(results)))%}
-            <li>{{results[i].name}}</li>
-        {%endfor%}
-
+        <ol>
+            {%for i in results%}
+                <li>{{i.name}} - {{i.studio}}  Score:<b>{{i.rating}}</b></li>
+            {%endfor%}
+        </ol>
     </body>
 </html>
