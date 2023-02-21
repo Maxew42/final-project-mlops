@@ -1,0 +1,15 @@
+
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>What are you looking for ?</title>
+    </head>
+    <body>
+        {%for i in range(len(results)))%}
+            <li>{{results[i].name}}</li>
+        {%endfor%}
+
+    </body>
+</html>
