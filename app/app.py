@@ -36,8 +36,7 @@ def home():
 @app.route("/result",methods=['POST'])
 def classify():
 
-    key = request.form['key']
-
+    key = request.form.get('key', "Cowboy Bebop Bandai Visual Action")
     sims = (rep_mat @ model.transform([key]).T).toarray().squeeze()
     top_4_sims = np.argpartition(sims, -4)[-4:][::-1]
     df_top = df.iloc[list(top_4_sims)]
