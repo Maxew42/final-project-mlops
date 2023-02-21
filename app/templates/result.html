@@ -4,12 +4,12 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>What are you looking for ?</title>
+        <title>Top 4 Mangas</title>
     </head>
     <body>
         <ol>
             {%for i in results%}
-                <li>{{i.name}} - {{i.studio}}  Score:<b>{{i.rating}}</b></li>
+                <li>{{i.name}} - {{i.studio}} | Score:<b>{{i.rating}}</b></li>
             {%endfor%}
         </ol>
     </body>
