@@ -60,6 +60,12 @@ pipeline {
 
             }
         }
+        stage("user confirms before sending to main") {
+            input {
+                message "Just waiting a few secs"
+            }
+                   }
+
                 stage('Send to Main') {
             steps {
                 echo 'Merging and pushing on main'
