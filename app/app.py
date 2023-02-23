@@ -12,12 +12,12 @@ app = Flask(__name__)
 
 model_name = "pipeline_key_rep.pkl" #TODO: search from config 
 
-models_path= "../"
+models_path= ""
 
 model = load(osp.join(models_path,model_name))  
 
 def extract_dataset():
-    path_to_data = "../data/Anime_data.csv"
+    path_to_data = "data/Anime_data.csv"
     df = pd.read_csv(path_to_data).dropna()
     df['Producer'] = df['Producer'].apply(lambda x: eval(x)[0] if not  pd.isna(x) else None)
     df['Studio'] = df['Studio'].apply(lambda x: eval(x)[0] if not  pd.isna(x) else None)
